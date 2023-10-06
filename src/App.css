@@ -2,6 +2,10 @@
   text-align: center;
 }
 
+.footer {
+  @apply bg-red-200 py-4
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -11,6 +15,14 @@
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .App-header {

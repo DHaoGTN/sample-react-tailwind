@@ -7,6 +7,17 @@ const MyCalendar = () => {
   const daysInMonth = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
   const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
 
+  const currentDay = new Date().getDate();
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  const isCurrentWeek = (day) => {
+    const dateInQuestion = new Date(date.getFullYear(), date.getMonth(), day);
+    const startOfWeek = currentDay - new Date().getDay();
+    const endOfWeek = startOfWeek + 6;
+    return currentYear === date.getFullYear() && currentMonth === date.getMonth() && day >= startOfWeek && day <= endOfWeek;
+  };
+
   const handlePrevMonth = () => {
     setDate(new Date(date.getFullYear(), date.getMonth() - 1, 1));
   };
@@ -26,16 +37,16 @@ const MyCalendar = () => {
           <button onClick={handleNextMonth}>&gt;</button>
         </div>
         <div className="grid grid-cols-7 gap-2 text-center">
-          {weekdays.map((weekday, index) => (
-            <div key={index} className="uppercase font-bold text-gray-500">
+          {weekdays.map((weekday) => (
+            <div key={weekday} className="uppercase font-bold text-gray-500">
               {weekday}
             </div>
           ))}
-          {[...Array(firstDayOfMonth).keys()].map((index) => (
+          {Array.from({ length: firstDayOfMonth }).map((_, index) => (
             <div key={index}></div>
           ))}
-          {[...Array(daysInMonth).keys()].map((index) => (
-            <div key={index} className="p-2 rounded-full hover:bg-gray-200">
+          {Array.from({ length: daysInMonth }).map((_, index) => (
+            <div key={index + 1} className={`p-2 rounded-full hover:bg-gray-200 ${isCurrentWeek(index + 1) ? 'bg-green-200' : ''}`}>
               {index + 1}
             </div>
           ))}

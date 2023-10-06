@@ -1,29 +1,69 @@
 import React, { useState } from 'react';
 
 const Attendance = () => {
-  const [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [attendanceList, setAttendanceList] = useState([]);
 
-  const handleAttendance = () => {
-    const currentTime = new Date().toLocaleTimeString();
-    const newRecord = { time: currentTime };
-    setAttendanceRecords([...attendanceRecords, newRecord]);
-    // You can save the attendance record to a database here
+  const handleStartWork = () => {
+    setStartTime(new Date().toLocaleTimeString());
+    setEndTime(null);
+  };
+
+  const handleEndWork = () => {
+    setEndTime(new Date().toLocaleTimeString());
+    setAttendanceList([...attendanceList, { start: startTime, end: new Date().toLocaleTimeString() }]);
+    setStartTime(null);
   };
 
   return (
-    <div className="max-w-md mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Attendance App</h1>
-      <p className="mb-4">Current Time: {new Date().toLocaleTimeString()}</p>
-      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleAttendance}>
-        Mark Attendance
-      </button>
-      <div className="mt-4">
-        <h2 className="text-lg font-bold mb-2">Attendance Records:</h2>
-        {attendanceRecords.map((record, index) => (
-          <div key={index} className="border-b py-2">
-            {record.time}
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
+      <div className="bg-white p-10 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold mb-4">Attendance App</h1>
+        <div className="flex justify-between mb-4">
+          <div>
+            <p className="text-2xl font-medium">Current Time:</p>
+            <p className="text-xl">{new Date().toLocaleTimeString()}</p>
           </div>
-        ))}
+          <div>
+            <button
+              onClick={handleStartWork}
+              disabled={startTime !== null}
+              className={`${
+                startTime === null ? 'bg-green-500 hover:bg-green-600' : 'bg-gray-400 cursor-not-allowed'
+              } text-white py-2 px-4 rounded-md`}
+            >
+              Start Work
+            </button>
+            <button
+              onClick={handleEndWork}
+              disabled={startTime === null || endTime !== null}
+              className={`${
+                endTime === null ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-400 cursor-not-allowed'
+              } text-white py-2 px-4 rounded-md ml-4`}
+            >
+              End Work
+            </button>
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="table-auto w-full">
+            <thead>
+              <tr>
+                <th className="px-4 py-2">Start Time</th>
+                <th className="px-4 py-2">End Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {attendanceList.map((attendance, index) => (
+                <tr key={index}>
+                  <td className="border px-4 py-2">{attendance.start}</td>
+                  <td className="border px-4 py-2">{attendance.end}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
